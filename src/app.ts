@@ -17,7 +17,7 @@ app.register(socialProjectsPrivateRoutes, {
 });
 
 app.register(socialProjectsPublicRoutes, {
-  prefix: "socialProjects",
+  prefix: "public",
 });
 
 app.addHook("onError", errorHandler);

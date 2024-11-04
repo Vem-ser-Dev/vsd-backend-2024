@@ -6,5 +6,5 @@ tmp/
 temp/
 ./build/
 
-.env
-.env.test
+./.env
+./.env.test

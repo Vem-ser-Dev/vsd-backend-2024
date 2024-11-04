@@ -10,12 +10,6 @@ class AuthController {
 
     return reply.code(200).send(result);
   }
-
-  async createUser(request: FastifyRequest, reply: FastifyReply) {
-    const result = await authService.createUser();
-
-    return reply.code(201).send(result);
-  }
 }
 
 export const authController = new AuthController();
