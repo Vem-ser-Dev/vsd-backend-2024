@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import * as jwt from "jsonwebtoken";
+import { env } from "../env";
 
 export const authMiddleware = (
   request: FastifyRequest,
@@ -10,7 +11,7 @@ export const authMiddleware = (
   if (!token) {
     return reply.status(401).send({ message: "Unauthorized" });
   }
-  jwt.verify(token, process.env.JWT_SECRET as string, (err) => {
+  jwt.verify(token, env.JWT_SECRET as string, (err) => {
     if (err) {
       return reply.status(401).send({ message: "Unauthorized" });
     }
