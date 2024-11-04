@@ -7,11 +7,11 @@ Uma api para gerenciar Serviços Sociais relacionados ao Conselho Tutelar de Pir
 
 ### Usuário:
 
-- [x] Login de usuário.
+[x] Login de usuário.
 
 ### Serviço Social
-- [x] Cadastrar Serviço Social.
-- [x] Listar Serviços Sociais cadastrados.
-- [x] Listar Serviços Sociais publicamente.
-- [x] Alterar informações de um Serviço Social.
-- [] Apagar Serviço Social.
+[x] Cadastrar Serviço Social.
+[x] Listar Serviços Sociais cadastrados.
+[x] Listar Serviços Sociais publicamente.
+[x] Alterar informações de um Serviço Social.
+[] Apagar Serviço Social.
