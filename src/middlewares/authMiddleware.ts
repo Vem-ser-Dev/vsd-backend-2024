@@ -3,7 +3,8 @@ import * as jwt from "jsonwebtoken";
 
 export const authMiddleware = (
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
+  done: () => void
 ) => {
   const token = request.headers.authorization?.split(" ")[1];
   if (!token) {
@@ -14,4 +15,5 @@ export const authMiddleware = (
       return reply.status(401).send({ message: "Unauthorized" });
     }
   });
+  done();
 };

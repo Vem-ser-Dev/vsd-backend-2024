@@ -12,17 +12,19 @@ export class User {
   uid!: string;
 
   @Column("varchar", {
-    length: 255,
+    length: 100,
   })
   full_name!: string;
 
   @Column("varchar", {
-    length: 255,
+    length: 130,
+    unique: true,
   })
   email!: string;
 
   @Column("varchar", {
     length: 50,
+    unique: true,
   })
   document!: string;
 

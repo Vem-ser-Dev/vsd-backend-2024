@@ -1,18 +1,23 @@
 import fastify from "fastify";
-import { handleDatabaseConnection } from "./database/database";
 import { errorHandler } from "./middlewares/errorMidleware";
 import { authPublicRoutes } from "./routes/auth/authPublicRoutes";
+import { socialProjectsPrivateRoutes } from "./routes/socialProjects/socialProjectsPrivateRoutes";
+import { socialProjectsPublicRoutes } from "./routes/socialProjects/socialProjectsPublicRoutes";
 
 export const app = fastify();
-
-app.addHook("onError", errorHandler);
 
 app.addHook("preHandler", async (request) => {
   console.log(`[${request.method}] ${request.url}`);
 });
 
-app.register(handleDatabaseConnection);
-
 app.register(authPublicRoutes);
 
-// app.addHook("preHandler", authMiddleware);
+app.register(socialProjectsPrivateRoutes, {
+  prefix: "socialProjects",
+});
+
+app.register(socialProjectsPublicRoutes, {
+  prefix: "socialProjects",
+});
+
+app.addHook("onError", errorHandler);
