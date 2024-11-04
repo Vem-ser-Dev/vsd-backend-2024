@@ -1,7 +1,7 @@
 import { app } from "./app";
 import { appDataSource } from "./database/dataSource";
+import { createUser } from "./database/seeds/createUser";
 import { env } from "./env";
-import { createUser } from "./seed";
 
 export async function initServer() {
   try {

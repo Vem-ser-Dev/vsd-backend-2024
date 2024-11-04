@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { DataSource } from "typeorm";
-import { User } from "./database/entities/User";
+import { User } from "../entities/User";
 
 export async function createUser(appDataSource: DataSource) {
   const userData = new User();
