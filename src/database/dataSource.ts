@@ -3,7 +3,8 @@ import {
   DataSourceOptions,
 } from "../../node_modules/typeorm/index";
 import { env } from "../env";
-import { SocialProject } from "./entities/SocialProject";
+import { ServiceCategory } from "./entities/ServiceCategory";
+import { SocialService } from "./entities/SocialService";
 import { User } from "./entities/User";
 
 export const typeOrmConnectionOptions: DataSourceOptions = {
@@ -14,7 +15,7 @@ export const typeOrmConnectionOptions: DataSourceOptions = {
   password: env.POSTGRES_PASSWORD,
   database: env.POSTGRES_DB,
   synchronize: env.DB_HOST === "localhost" ? true : false,
-  entities: [User, SocialProject],
+  entities: [User, SocialService, ServiceCategory],
   migrations: [__dirname + "migrations/*.js"],
   migrationsTableName: "migration_table",
 };

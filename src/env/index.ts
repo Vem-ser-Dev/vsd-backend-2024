@@ -4,18 +4,20 @@ import { z } from "zod";
 if (process.env.NODE_ENV === "test") {
   config({ path: ".env.test" });
 } else {
-  config();
+  config({ path: ".env" });
 }
 
 const envSchema = z.object({
   JWT_SECRET: z.string(),
-  PORT: z.coerce.number().default(3000),
+  APP_PORT: z.coerce.number().default(5001),
 
   DB_HOST: z.string(),
   DB_PORT: z.coerce.number().default(5432),
   POSTGRES_USER: z.string(),
   POSTGRES_PASSWORD: z.string(),
   POSTGRES_DB: z.string(),
+
+  INITIAL_CATEGORIES: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

@@ -1,8 +1,9 @@
 import fastify from "fastify";
 import { errorHandler } from "./middlewares/errorMidleware";
 import { authPublicRoutes } from "./routes/auth/authPublicRoutes";
-import { socialProjectsPrivateRoutes } from "./routes/socialProjects/socialProjectsPrivateRoutes";
-import { socialProjectsPublicRoutes } from "./routes/socialProjects/socialProjectsPublicRoutes";
+import { socialServicesPrivateRoutes } from "./routes/socialServices/socialServicesPrivateRoutes";
+import { socialServicesPublicRoutes } from "./routes/socialServices/socialServicesPublicRoutes";
+import { serviceCategoryPrivateRoutes } from "./routes/serviceCategory/serviceCategoryPrivateRoutes";
 
 export const app = fastify();
 
@@ -12,11 +13,15 @@ app.addHook("preHandler", async (request) => {
 
 app.register(authPublicRoutes);
 
-app.register(socialProjectsPrivateRoutes, {
-  prefix: "socialProjects",
+app.register(socialServicesPrivateRoutes, {
+  prefix: "socialServices",
 });
 
-app.register(socialProjectsPublicRoutes, {
+app.register(serviceCategoryPrivateRoutes, {
+  prefix: "serviceCategory",
+});
+
+app.register(socialServicesPublicRoutes, {
   prefix: "public",
 });
 

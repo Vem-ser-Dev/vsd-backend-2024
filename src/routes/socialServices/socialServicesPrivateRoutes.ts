@@ -1,23 +1,23 @@
 import { FastifyInstance } from "fastify";
-import { socialProjectsController } from "../../controllers/socialProjects/socialProjectsController";
 import { authMiddleware } from "../../middlewares/authMiddleware";
+import { socialServicesController } from "../../controllers/socialService/socialServicesController";
 
-export function socialProjectsPrivateRoutes(app: FastifyInstance) {
+export function socialServicesPrivateRoutes(app: FastifyInstance) {
   app.post(
     "/create",
     { preHandler: [authMiddleware] },
-    socialProjectsController.createProject
+    socialServicesController.createService
   );
 
   app.put(
     "/:uid",
     { preHandler: [authMiddleware] },
-    socialProjectsController.updateProject
+    socialServicesController.updateService
   );
 
   app.get(
     "/",
     { preHandler: [authMiddleware] },
-    socialProjectsController.findManyProjects
+    socialServicesController.findManyServices
   );
 }

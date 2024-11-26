@@ -1,4 +1,4 @@
-export enum EProjectStatus {
+export enum ESocialServiceStatus {
   ENABLED = "ENABLED",
   DISABLED = "DISABLED",
 }

@@ -15,8 +15,10 @@ export async function createUser(appDataSource: DataSource) {
   userData.password = hashed_password;
   userData.created_at = new Date();
 
-  const userExist = await appDataSource.manager.findBy(User, {
-    uid: userData.uid,
+  const userExist = await appDataSource.manager.findOne(User, {
+    where: {
+      uid: userData.uid,
+    },
   });
 
   if (!userExist) {
@@ -24,4 +26,6 @@ export async function createUser(appDataSource: DataSource) {
 
     console.log("create user with success!");
   }
+
+  console.log("create user seed conclusion!");
 }
