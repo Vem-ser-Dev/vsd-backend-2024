@@ -15,6 +15,12 @@ export function socialServicesPrivateRoutes(app: FastifyInstance) {
     socialServicesController.updateService
   );
 
+  app.put(
+    "/:uid/status",
+    { preHandler: [authMiddleware] },
+    socialServicesController.updateServiceStatus
+  );
+
   app.get(
     "/",
     { preHandler: [authMiddleware] },

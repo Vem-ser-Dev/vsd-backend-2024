@@ -2,7 +2,6 @@ import { DataSource } from "typeorm";
 import { env } from "../../env";
 import { ECategoryStatus } from "../../models/ECategoryStatus";
 import { ServiceCategory } from "../entities/ServiceCategory";
-import { User } from "../entities/User";
 
 export async function createInitialCategories(appDataSource: DataSource) {
   const categoryList = env.INITIAL_CATEGORIES.split(", ");

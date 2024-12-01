@@ -20,7 +20,7 @@ export type CreateSocialServicePayload = Pick<
   | "municipal_law"
   | "laws"
   | "naming_of_laws"
-> & { service_category: Pick<ServiceCategory, "uid"> };
+> & { service_category: Partial<Pick<ServiceCategory, "name" | "uid">> };
 
 export type UpdateSocialServicePayload = Pick<SocialService, "uid"> &
   Pick<
@@ -42,7 +42,10 @@ export type UpdateSocialServicePayload = Pick<SocialService, "uid"> &
     | "laws"
     | "naming_of_laws"
     | "status"
-  > & { service_category: Pick<ServiceCategory, "uid"> };
+  > & { service_category: Partial<Pick<ServiceCategory, "uid" | "name">> };
+
+export type UpdateSocialServiceStatusPayload = Pick<SocialService, "uid"> &
+  Pick<SocialService, "status">;
 
 export type FindManySocialServicePayload = {
   status?: ESocialServiceStatus | undefined;

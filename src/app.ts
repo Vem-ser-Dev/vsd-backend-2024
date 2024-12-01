@@ -4,6 +4,7 @@ import { authPublicRoutes } from "./routes/auth/authPublicRoutes";
 import { socialServicesPrivateRoutes } from "./routes/socialServices/socialServicesPrivateRoutes";
 import { socialServicesPublicRoutes } from "./routes/socialServices/socialServicesPublicRoutes";
 import { serviceCategoryPrivateRoutes } from "./routes/serviceCategory/serviceCategoryPrivateRoutes";
+import { serviceCategoryPublicRoutes } from "./routes/serviceCategory/serviceCategoryPublicRoutes";
 
 export const app = fastify();
 
@@ -19,6 +20,10 @@ app.register(socialServicesPrivateRoutes, {
 
 app.register(serviceCategoryPrivateRoutes, {
   prefix: "serviceCategory",
+});
+
+app.register(serviceCategoryPublicRoutes, {
+  prefix: "public",
 });
 
 app.register(socialServicesPublicRoutes, {

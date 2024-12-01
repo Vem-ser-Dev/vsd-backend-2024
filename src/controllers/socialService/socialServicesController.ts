@@ -5,6 +5,7 @@ import {
   createSocialServiceValidation,
   findManyServicesValidation,
   serviceUidValidation,
+  updateSocialServiceStatusValidation,
   updateSocialServiceValidation,
 } from "./validations/socialServicesValidation";
 
@@ -12,7 +13,7 @@ class SocialServicesController {
   async createService(request: FastifyRequest, reply: FastifyReply) {
     const bodyPayload = await createSocialServiceValidation(request.body);
 
-    const result = await socialServicesService.createProject(bodyPayload);
+    const result = await socialServicesService.createService(bodyPayload);
 
     return reply.code(200).send(result);
   }
@@ -21,7 +22,19 @@ class SocialServicesController {
     const queryPayload = await serviceUidValidation(request.params);
     const bodyPayload = await updateSocialServiceValidation(request.body);
 
-    const result = await socialServicesService.updateProject({
+    const result = await socialServicesService.updateService({
+      ...queryPayload,
+      ...bodyPayload,
+    });
+
+    return reply.code(200).send(result);
+  }
+
+  async updateServiceStatus(request: FastifyRequest, reply: FastifyReply) {
+    const queryPayload = await serviceUidValidation(request.params);
+    const bodyPayload = await updateSocialServiceStatusValidation(request.body);
+
+    const result = await socialServicesService.updateServiceStatus({
       ...queryPayload,
       ...bodyPayload,
     });

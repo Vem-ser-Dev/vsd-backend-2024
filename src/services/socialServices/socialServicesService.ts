@@ -1,5 +1,7 @@
 import { FindManyOptions, Like, Not } from "typeorm";
 import { appDataSource } from "../../database/dataSource";
+import { ServiceCategory } from "../../database/entities/ServiceCategory";
+import { SocialService } from "../../database/entities/SocialService";
 import { ESocialServiceStatus } from "../../models/ESocialServiceStatus";
 import { BadRequestError } from "../../models/exceptions";
 import {
@@ -7,11 +9,12 @@ import {
   FindManySocialServicePayload,
   GetProjectPayload,
   UpdateSocialServicePayload,
+  UpdateSocialServiceStatusPayload,
 } from "../../models/SocialProjectPayload";
-import { SocialService } from "../../database/entities/SocialService";
+import { serviceCategoryService } from "../serviceCategory/serviceCategoryService";
 
 export class SocialServicesService {
-  async createProject({
+  async createService({
     service_name,
     service_category,
     description,
@@ -38,24 +41,56 @@ export class SocialServicesService {
       throw new BadRequestError("Service with the same name already exists");
     }
 
+    let createdCategory:
+      | {
+          uid: string;
+          name: string;
+          status: ESocialServiceStatus;
+        }
+      | undefined = undefined;
+
+    if (service_category.name !== undefined) {
+      createdCategory = await serviceCategoryService.createCategory({
+        name: service_category.name,
+      });
+    } else if (service_category.uid !== undefined) {
+      const findedServiceCategory = await appDataSource.manager.findOneBy(
+        ServiceCategory,
+        {
+          uid: service_category.uid,
+        }
+      );
+
+      if (findedServiceCategory === null) {
+        throw new BadRequestError("Service category does not exist");
+      }
+    }
+
+    const serviceCategoryToAppend = new ServiceCategory();
+
+    serviceCategoryToAppend.uid =
+      createdCategory !== undefined
+        ? createdCategory.uid
+        : service_category.uid ?? "";
+
     const result = await appDataSource.manager.save(SocialService, {
       service_name,
-      service_category,
       description,
       agent_name,
       agent_role,
       email,
       phone,
       website,
-      organ,
-      management,
-      public_unit,
-      organization,
-      service_provider,
-      main_law,
-      municipal_law,
-      laws,
-      naming_of_laws,
+      organ: organ ? organ : undefined,
+      management: management ? management : undefined,
+      public_unit: public_unit ? public_unit : undefined,
+      organization: organization ? organization : undefined,
+      service_provider: service_provider ? service_provider : undefined,
+      main_law: main_law ? main_law : undefined,
+      municipal_law: municipal_law ? municipal_law : undefined,
+      laws: laws ? laws : undefined,
+      naming_of_laws: naming_of_laws ? naming_of_laws : undefined,
+      service_category: serviceCategoryToAppend,
       status: ESocialServiceStatus.ENABLED,
     });
 
@@ -82,7 +117,7 @@ export class SocialServicesService {
     };
   }
 
-  async updateProject({
+  async updateService({
     uid,
     service_name,
     service_category,
@@ -123,10 +158,42 @@ export class SocialServicesService {
       throw new BadRequestError("Project name already exists");
     }
 
+    let createdCategory:
+      | {
+          uid: string;
+          name: string;
+          status: ESocialServiceStatus;
+        }
+      | undefined = undefined;
+
+    if (service_category.name !== undefined) {
+      createdCategory = await serviceCategoryService.createCategory({
+        name: service_category.name,
+      });
+    } else if (service_category.uid !== undefined) {
+      const findedServiceCategory = await appDataSource.manager.findOneBy(
+        ServiceCategory,
+        {
+          uid: service_category.uid,
+        }
+      );
+
+      if (findedServiceCategory === null) {
+        throw new BadRequestError("Service category does not exist");
+      }
+    }
+
+    const serviceCategoryToAppend = new ServiceCategory();
+
+    serviceCategoryToAppend.uid =
+      createdCategory !== undefined
+        ? createdCategory.uid
+        : service_category.uid ?? "";
+
     const result = await appDataSource.manager.save(SocialService, {
       uid,
       service_name,
-      service_category,
+      service_category: serviceCategoryToAppend,
       description,
       agent_name,
       agent_role,
@@ -168,6 +235,26 @@ export class SocialServicesService {
     };
   }
 
+  async updateServiceStatus({ uid, status }: UpdateSocialServiceStatusPayload) {
+    const socialService = await appDataSource.manager.findOneBy(SocialService, {
+      uid,
+    });
+
+    if (!socialService) {
+      throw new BadRequestError("Social Service does not exists");
+    }
+
+    const result = await appDataSource.manager.save(SocialService, {
+      uid,
+      status,
+    });
+
+    return {
+      uid: result.uid,
+      status: result.status,
+    };
+  }
+
   async findManyProjects({
     search,
     status,
@@ -191,26 +278,29 @@ export class SocialServicesService {
       };
     }
 
-    const socialProjects = await appDataSource.manager.find(SocialService, {
-      where,
-      select: {
-        service_category: {
-          uid: true,
-          name: true,
+    const [socialProjects, count] = await appDataSource.manager.findAndCount(
+      SocialService,
+      {
+        where,
+        select: {
+          service_category: {
+            uid: true,
+            name: true,
+          },
         },
-      },
-      relations: {
-        service_category: true,
-      },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    });
+        relations: {
+          service_category: true,
+        },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }
+    );
 
     return {
       data: socialProjects,
       pagination: {
         currentPage: page,
-        count: socialProjects.length,
+        count: count,
       },
     };
   }
@@ -234,25 +324,25 @@ export class SocialServicesService {
     }
 
     return {
-      uid: socialService.uid,
-      service_name: socialService.service_name,
-      service_category: socialService.service_category,
-      description: socialService.description,
-      agent_name: socialService.agent_name,
-      agent_role: socialService.agent_role,
-      email: socialService.email,
-      phone: socialService.phone,
-      website: socialService.website,
-      status: socialService.status,
-      organ: socialService.organ,
-      management: socialService.management,
-      public_unit: socialService.public_unit,
-      organization: socialService.organization,
-      service_provider: socialService.service_provider,
-      main_law: socialService.main_law,
-      municipal_law: socialService.municipal_law,
-      laws: socialService.laws,
-      naming_of_laws: socialService.naming_of_laws,
+      uid: socialService.uid ?? undefined,
+      service_name: socialService.service_name ?? undefined,
+      service_category: socialService.service_category ?? undefined,
+      description: socialService.description ?? undefined,
+      agent_name: socialService.agent_name ?? undefined,
+      agent_role: socialService.agent_role ?? undefined,
+      email: socialService.email ?? undefined,
+      phone: socialService.phone ?? undefined,
+      website: socialService.website ?? undefined,
+      status: socialService.status ?? undefined,
+      organ: socialService.organ ?? undefined,
+      management: socialService.management ?? undefined,
+      public_unit: socialService.public_unit ?? undefined,
+      organization: socialService.organization ?? undefined,
+      service_provider: socialService.service_provider ?? undefined,
+      main_law: socialService.main_law ?? undefined,
+      municipal_law: socialService.municipal_law ?? undefined,
+      laws: socialService.laws ?? undefined,
+      naming_of_laws: socialService.naming_of_laws ?? undefined,
     };
   }
 }

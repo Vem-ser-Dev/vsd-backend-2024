@@ -1,8 +1,11 @@
+# file name: env.local
+
 DB_HOST=localhost
 DB_PORT=5432
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=main
+
 INITIAL_CATEGORIES=Psicologia, Assistência Social, Direitos e Proteção, Saúde, Educação
 
 APP_PORT=5001

@@ -9,6 +9,8 @@ export const errorHandler = (
   reply: FastifyReply,
   error: unknown
 ) => {
+  console.log("err", error);
+
   if (error instanceof ZodError || error instanceof BadRequestError) {
     reply.status(400).send({ message: "Invalid data" });
   } else if (error instanceof NotFoundError) {
