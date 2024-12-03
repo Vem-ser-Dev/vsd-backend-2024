@@ -26,8 +26,8 @@ export class SocialService {
   })
   service_category: ServiceCategory;
 
-  @Column("varchar", {
-    length: 255,
+  @Column("character varying", {
+    length: 1500,
     nullable: false,
   })
   description: string;

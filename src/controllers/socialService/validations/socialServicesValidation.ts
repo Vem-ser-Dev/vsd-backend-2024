@@ -27,7 +27,7 @@ export async function createSocialServiceValidation(body: unknown) {
     description: z
       .string({ message: "Campo obrigatório" })
       .min(1, "Campo obrigatório")
-      .max(255, "Limite de caracteres excedido.Permitido até: 255."),
+      .max(1500, "Limite de caracteres excedido.Permitido até: 1500."),
     agent_name: z
       .string({ message: "Campo obrigatório" })
       .min(1, "Campo obrigatório")
@@ -36,13 +36,10 @@ export async function createSocialServiceValidation(body: unknown) {
       .string({ message: "Campo obrigatório" })
       .min(1, "Campo obrigatório")
       .max(50, "Limite de caracteres excedido.Permitido até: 50."),
-    contactType: z.enum(["phone", "email"], { message: "Campo obrigatório" }),
-    contactInfo: z
+    phone: z.string({ message: "Campo obrigatório" }),
+    email: z
       .string({ message: "Campo obrigatório" })
-      .refine(
-        (value) => phoneRegex.test(value) || emailRegex.test(value),
-        "Insira um Telefone ou E-mail válido"
-      ),
+      .email("Formato de e-mail inválido"),
     website: z
       .string({ message: "Campo obrigatório" })
       .min(1, "Campo obrigatório")
@@ -71,7 +68,7 @@ export async function updateSocialServiceValidation(body: unknown) {
   const socialServiceBodySchema = z.object({
     service_name: z.string().min(1).max(100),
     service_category: serviceCategorySchema,
-    description: z.string().min(1).max(255),
+    description: z.string().min(1).max(1500),
     agent_name: z.string().min(1).max(80),
     agent_role: z.string().max(50),
     email: z.string().email().optional(),

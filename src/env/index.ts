@@ -14,13 +14,13 @@ const envSchema = z.object({
   JWT_SECRET: z.string(),
   APP_PORT: z.coerce.number().default(5001),
 
-  // DB_HOST: z.string(),
-  // DB_PORT: z.coerce.number().default(5432),
-  // POSTGRES_USER: z.string(),
-  // POSTGRES_PASSWORD: z.string(),
-  // POSTGRES_DB: z.string(),
+  DB_HOST: z.string(),
+  DB_PORT: z.coerce.number().default(5432),
+  POSTGRES_USER: z.string(),
+  POSTGRES_PASSWORD: z.string(),
+  POSTGRES_DB: z.string(),
 
-  DB_URL: z.string(),
+  // DB_URL: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
